@@ -15,7 +15,6 @@ const useStyles = makeStyles({
 
 export default function OutlinedCard(props) {
   const classes = useStyles();
-  console.log(props);
 
   const { name, address, id } = props;
 
