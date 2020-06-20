@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const app = express();
@@ -7,6 +8,8 @@ const app = express();
 // Routes
 const adminRoutes = require('./routes/admin');
 const detailRoutes = require('./routes/detail');
+
+app.use(cors());
 app.use(bodyParser.json());
 
 app.use('/admin', adminRoutes);

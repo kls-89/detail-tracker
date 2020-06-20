@@ -3,7 +3,10 @@ const router = express.Router();
 const adminController = require('../controllers/admin');
 
 // View all Agencies
-router.get('/agency', adminController.getAgency);
+router.get('/agency', adminController.getAgencies);
+
+// View individual agency
+router.get('/agency/:id', adminController.getAgency);
 
 // Create new Agency
 router.post('/agency', adminController.postAgency);
