@@ -1,3 +1,5 @@
+// TODO Delete employee, agencyAdministrator, and detail arrays on DELETE
+
 const mongoose = require('mongoose');
 
 const agencySchema = new mongoose.Schema({
@@ -22,18 +24,14 @@ const agencySchema = new mongoose.Schema({
     required: true,
     default: true
   },
-  employees: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "Employee" }
-  ],
+  employees: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Employee' }],
   agencyAdministrators: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "Employee" }
+    { type: mongoose.Schema.Types.ObjectId, ref: 'Employee' }
   ],
-  details: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "Detail" }
-  ]
+  details: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Detail' }]
 });
 
-agencySchema.set("toJSON", {
+agencySchema.set('toJSON', {
   transform: (document, returnedObj) => {
     returnedObj.id = returnedObj._id.toString();
     delete returnedObj._id;
@@ -41,6 +39,6 @@ agencySchema.set("toJSON", {
   }
 });
 
-const Agency = mongoose.model("Agency", agencySchema);
+const Agency = mongoose.model('Agency', agencySchema);
 
 module.exports = Agency;

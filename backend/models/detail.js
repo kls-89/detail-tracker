@@ -7,63 +7,65 @@ const schemaOptions = {
   }
 };
 
-const detailSchema = new mongoose.Schema({
-  dateCreated: {
-    type: Date,
-    default: Date.now
-  },
-  dateOfDetail: {
-    type: Date,
-    required: true
-  },
-  startTime: {
-    type: Date,
-    required: true,
-    default: Date.now
-  },
-  endTime: {
-    type: Date
-  },
-  duration: {
-    type: Number,
-    required: true,
-    default: 8
-  },
-  location: {
-    type: String,
-    required: true
-  },
-  numberOfOfficers: {
-    type: Number,
-    required: true,
-    default: 1
-  },
-  cruiserNeeded: {
-    type: Boolean,
-    required: true,
-    default: false
-  },
-  vendorContactName: {
-    type: String,
-    required: true
-  },
+const detailSchema = new mongoose.Schema(
+  {
+    dateOfDetail: {
+      type: Date,
+      required: true
+    },
+    detailFilled: {
+      type: Boolean,
+      default: false
+    },
+    startTime: {
+      type: Date,
+      required: true,
+      default: Date.now
+    },
+    endTime: {
+      type: Date
+    },
+    duration: {
+      type: Number,
+      required: true,
+      default: 8
+    },
+    location: {
+      type: String,
+      required: true
+    },
+    numberOfOfficers: {
+      type: Number,
+      required: true,
+      default: 1
+    },
+    cruiserNeeded: {
+      type: Boolean,
+      required: true,
+      default: false
+    },
+    vendorContactName: {
+      type: String,
+      required: true
+    },
 
-  vendorContactTelephone: {
-    type: String,
-    required: true
+    vendorContactTelephone: {
+      type: String,
+      required: true
+    },
+    vendorBillingInformation: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Vendor'
+    },
+    agencyId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Agency'
+    }
   },
-  vendorBillingInformation: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Vendor"
-  },
-  agencyId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Agency"
-  }
-}, schemaOptions);
+  schemaOptions
+);
 
-
-detailSchema.set("toJSON", {
+detailSchema.set('toJSON', {
   transform: (document, returnedObj) => {
     returnedObj.id = returnedObj._id.toString();
     delete returnedObj._id;
@@ -71,7 +73,6 @@ detailSchema.set("toJSON", {
   }
 });
 
-
-const Detail = mongoose.model("Detail", detailSchema);
+const Detail = mongoose.model('Detail', detailSchema);
 
 module.exports = Detail;
