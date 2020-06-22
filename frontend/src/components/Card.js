@@ -7,6 +7,8 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
+const BASE_URL = 'http://localhost:3001/admin';
+
 const useStyles = makeStyles({
   root: {
     minWidth: 275
@@ -20,7 +22,7 @@ export default function OutlinedCard(props) {
 
   const handleDelete = () => {
     return axios
-      .delete(`http://localhost:3001/admin/agency/${id}`)
+      .delete(`${BASE_URL}/agency/${id}`)
       .then(res => {
         console.log('deleted the agency.');
         props.history.push('/admin/');
@@ -29,7 +31,7 @@ export default function OutlinedCard(props) {
   };
 
   const handleClick = () => {
-    props.history.push(`/agency/${id}`);
+    props.history.push(`/agency/${id}/edit`);
   };
 
   return (

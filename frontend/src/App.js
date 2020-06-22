@@ -5,6 +5,8 @@ import Appbar from './components/Appbar';
 import AdminDashboard from './pages/AdminDashboard';
 import AgencyPage from './pages/AgencyPage';
 import NewAgencyForm from './components/NewAgencyForm';
+import EditAgencyForm from './components/EditAgencyForm';
+
 
 function App(props) {
   return (
@@ -20,6 +22,11 @@ function App(props) {
           exact
           path="/agency/:id"
           render={routeProps => <AgencyPage {...routeProps} />}
+        />
+        <Route
+          exact
+          path="/agency/:id/edit"
+          render={routeProps => <EditAgencyForm {...routeProps} />}
         />
         <Route
           exact

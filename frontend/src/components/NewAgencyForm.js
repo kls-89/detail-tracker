@@ -21,8 +21,6 @@ const NewAgencyForm = props => {
     }
   });
 
-  console.log(formik.values);
-
   return (
     <form
       method="POST"

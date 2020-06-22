@@ -17,4 +17,19 @@ router.put('/agency/:id', adminController.putAgency);
 // Delete Agency
 router.delete('/agency/:id', adminController.deleteAgency);
 
+// View all Employees
+router.get('/employee', adminController.getEmployees);
+
+// view individual employee
+router.get('/employee/:id', adminController.getEmployee);
+
+// Create new Employee
+router.post('/employee', adminController.postEmployee);
+
+// Update Employee
+router.put('/employee/:id', adminController.putEmployee);
+
+// Delete Employee
+router.delete('/employee/:id', adminController.deleteEmployee);
+
 module.exports = router;
