@@ -1,17 +1,18 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import './App.css';
-import Appbar from './components/Appbar';
+import LandingPage from './pages/LandingPage';
 import AdminDashboard from './pages/AdminDashboard';
 import AgencyPage from './pages/AgencyPage';
 import NewAgencyForm from './components/NewAgencyForm';
 import EditAgencyForm from './components/EditAgencyForm';
-
+import AppNavbar from './components/AppNavbar';
 
 function App(props) {
   return (
     <div className="App">
-      <Appbar {...props} />
+      {/* <Appbar {...props} /> */}
+      <AppNavbar />
       <Switch>
         <Route
           exact
@@ -32,6 +33,11 @@ function App(props) {
           exact
           path="/admin/agency/new"
           render={routeProps => <NewAgencyForm {...routeProps} />}
+        />
+        <Route
+          exact
+          path="/"
+          render={routeProps => <LandingPage {...routeProps} />}
         />
       </Switch>
     </div>
