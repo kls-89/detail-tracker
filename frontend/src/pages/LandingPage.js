@@ -6,7 +6,6 @@ import Button from 'react-bootstrap/Button';
 
 const LandingPage = () => {
   const styles = {
-    // background image source: https://unsplash.com/photos/cWpxm3Nmnlo
     backgroundImage:
       'url(https://images.unsplash.com/photo-1515600496618-e43b0599f518?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80)',
     backgroundSize: 'cover',
