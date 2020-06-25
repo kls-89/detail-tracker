@@ -21,10 +21,10 @@ const LandingPage = () => {
         </p>
         <p></p>
         <p>
-          <Button variant="primary">Admin Sign Up</Button>
+          <Link className="btn btn-primary" to="/admin/agency/new">Admin Sign Up</Link>
         </p>
         <p className="lead">
-          Already have an account? <Link>Log in</Link>
+          Already have an account? <Link to="/login">Log in</Link>
         </p>
       </Jumbotron>
     </Container>

@@ -4,14 +4,15 @@ import './App.css';
 import LandingPage from './pages/LandingPage';
 import AdminDashboard from './pages/AdminDashboard';
 import AgencyPage from './pages/AgencyPage';
+import LoginPage from "./pages/LoginPage";
 import NewAgencyForm from './components/NewAgencyForm';
 import EditAgencyForm from './components/EditAgencyForm';
 import AppNavbar from './components/AppNavbar';
 
-function App(props) {
+function App() {
   return (
     <div className="App">
-      {/* <Appbar {...props} /> */}
+
       <AppNavbar />
       <Switch>
         <Route
@@ -33,6 +34,11 @@ function App(props) {
           exact
           path="/admin/agency/new"
           render={routeProps => <NewAgencyForm {...routeProps} />}
+        />
+        <Route
+          exact
+          path="/login"
+          render={routeProps => <LoginPage {...routeProps} />}
         />
         <Route
           exact

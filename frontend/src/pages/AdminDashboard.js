@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Card from '../components/Card';
+import Container from "react-bootstrap/Container";
+import AppCard from '../components/AppCard';
 
 const BASE_URL = 'http://localhost:3001/admin';
 
@@ -20,7 +21,7 @@ const AdminDashboard = props => {
 
   const renderAgencies = agencies.map(agency => {
     return (
-      <Card
+      <AppCard
         {...props}
         key={agency.id}
         id={agency.id}
@@ -33,10 +34,10 @@ const AdminDashboard = props => {
   });
 
   return (
-    <div>
+    <Container>
       <h1>View All Agencies</h1>
-      {renderAgencies}
-    </div>
+      <Container className="d-flex">{renderAgencies}</Container>
+    </Container>
   );
 };
 
