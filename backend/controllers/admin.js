@@ -1,3 +1,6 @@
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
 const Agency = require('../models/agency');
 const Employee = require('../models/employee');
 
@@ -71,66 +74,64 @@ const postEmployee = async (req, res, next) => {
     name,
     phoneNumber,
     emailAddress,
-    passwordHash,
+    password,
     isAgencyAdmin,
     canWorkDetails,
     seniority,
     agencyAffiliation
   } = req.body;
 
-  const newEmployee = new Employee({
-    name,
-    phoneNumber,
-    emailAddress,
-    passwordHash,
-    isAgencyAdmin,
-    canWorkDetails,
-    seniority,
-    agencyAffiliation
-  });
   try {
-    await newEmployee.save();
-    res.status(200).json(newEmployee);
+    await bcrypt.hash(password, saltRounds, (err, passwordHash) => {
+      if (err) {
+        throw new Error('Error hashing password in postEmployee route', err);
+      }
+
+      // TODO: Add validation to verify employee doesn't already exist.
+
+      // CREATE NEW EMPLOYEE
+      const newEmployee = new Employee({
+        name,
+        phoneNumber,
+        emailAddress,
+        passwordHash,
+        isAgencyAdmin,
+        canWorkDetails,
+        seniority,
+        agencyAffiliation
+      });
+
+      // SAVE NEW EMPLOYEE TO EMPLOYEE COLLECTION
+      newEmployee
+        .save()
+        .then(async () => {
+          try {
+            const foundAgency = await Agency.findById(agencyAffiliation);
+            // Save ref to employee in the Agency's document
+            foundAgency.employees.push(newEmployee._id);
+            // update Agency Admin list if need be
+            if (isAgencyAdmin) {
+              foundAgency.agencyAdministrators.push(newEmployee._id);
+            }
+            await foundAgency.save();
+          } catch (error) {
+            if (error) throw new Error('Error Updating Agency', error);
+          }
+        })
+        .then(() => {
+          return res.status(200).json(newEmployee);
+        })
+        .catch(err =>
+          console.log(
+            'Error saving employee to db from postEmployee controller',
+            err
+          )
+        );
+    });
   } catch (error) {
     res.status(400).json({ error });
   }
 };
-
-// const employeeSchema = new mongoose.Schema({
-//   name: {
-//     type: String,
-//     required: true
-//   },
-//   phoneNumber: {
-//     type: String,
-//     required: true
-//   },
-//   emailAddress: {
-//     type: String,
-//     required: true
-//   },
-//   passwordHash: {
-//     type: String,
-//     required: true
-//   },
-//   passwordResetToken: {
-//     type: String
-//   },
-//   isAgencyAdmin: {
-//     type: Boolean,
-//     required: true
-//   },
-//   canWorkDetails: {
-//     type: Boolean,
-//     required: true
-//   },
-//   seniority: {
-//     type: Number,
-//     default: null
-//   },
-//   details: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Detail' }],
-//   agencyAffiliation: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Agency' }]
-// });
 
 const putEmployee = (req, res, next) => {
   console.log(req);
