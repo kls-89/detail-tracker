@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const employeeSchema = new mongoose.Schema({
   name: {
@@ -32,16 +32,11 @@ const employeeSchema = new mongoose.Schema({
     type: Number,
     default: null
   },
-  details: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "Detail" }
-  ],
-  agencyAffiliation: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "Agency" }
-  ],
-
+  details: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Detail' }],
+  agencyAffiliation: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Agency' }]
 });
 
-employeeSchema.set("toJSON", {
+employeeSchema.set('toJSON', {
   transform: (document, returnedObj) => {
     returnedObj.id = returnedObj._id.toString();
     delete returnedObj._id;
@@ -51,6 +46,6 @@ employeeSchema.set("toJSON", {
   }
 });
 
-const Employee = mongoose.model("Employee", employeeSchema);
+const Employee = mongoose.model('Employee', employeeSchema);
 
 module.exports = Employee;
