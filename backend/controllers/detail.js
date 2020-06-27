@@ -1,22 +1,66 @@
+const getDetails = (req, res, next) => {
+  res.status(200).json({
+    message: 'Handling GET request to /details'
+  });
+};
 const getDetail = (req, res, next) => {
-  res.send('Detail');
+  const detailId = req.params.detailId;
+  res.status(200).json({ message: 'Viewing /details/someId', detailId });
 };
 
 const postDetail = (req, res, next) => {
-  res.send('post Detail');
+  const {
+    dateOfDetail,
+    detailFilled,
+    startTime,
+    endTime,
+    duration,
+    location,
+    numberOfOfficers,
+    cruiserNeeded,
+    vendorContactName,
+    vendorContactTelephone,
+    vendorBillingInformation,
+    agencyId
+  } = req.body;
+
+  const detail = {
+    dateOfDetail,
+    detailFilled,
+    startTime,
+    endTime,
+    duration,
+    location,
+    numberOfOfficers,
+    cruiserNeeded,
+    vendorContactName,
+    vendorContactTelephone,
+    vendorBillingInformation,
+    agencyId
+  };
+  res.status(201).json({ message: 'Detail created', detail });
 };
 
-const putDetail = (req, res, next) => {
-  res.send('put Detail');
+const patchDetail = (req, res, next) => {
+  const detailId = req.params.id;
+  res.status(200).json({
+    message: 'Updated Detail',
+    detailId
+  });
 };
 
 const deleteDetail = (req, res, next) => {
-  res.send('delete this Detail.');
+  const detailId = req.params.detailId;
+  res.status(204).json({
+    message: 'Deleted Detail',
+    detailId
+  });
 };
 
 module.exports = {
+  getDetails,
   getDetail,
   postDetail,
-  putDetail,
+  patchDetail,
   deleteDetail
 };

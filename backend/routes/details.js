@@ -3,15 +3,18 @@ const router = express.Router();
 const detailController = require('../controllers/detail');
 
 // View all Details
-router.get('/', detailController.getDetail);
+router.get('/', detailController.getDetails);
+
+// View single Detail
+router.get('/:detailId', detailController.getDetail);
 
 // Create new Detail
 router.post('/', detailController.postDetail);
 
 // Update Detail
-router.put('/:id', detailController.putDetail);
+router.patch('/:detailId', detailController.patchDetail);
 
 // Delete Detail
-router.delete('/:id', detailController.deleteDetail);
+router.delete('/:detailId', detailController.deleteDetail);
 
 module.exports = router;
