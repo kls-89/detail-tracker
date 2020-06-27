@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Form from 'react-bootstrap/Form';
+
+// TODO: This form is majorly flawed. Needs to be redone.
 
 const BASE_URL = 'http://localhost:3001/admin';
 
@@ -25,9 +28,10 @@ const EditAgencyForm = props => {
   // Fetch data for individual agency.
   useEffect(() => {
     axios.get(`${BASE_URL}/agency/${agencyId}`).then(response => {
-      setEditFormValues({ ...response.data });
+      // setEditFormValues(...response.data);
     });
   }, [agencyId]);
+  console.log(editFormValues.employees);
 
   const handleChange = event => {
     const name = event.target.name;
@@ -71,146 +75,107 @@ const EditAgencyForm = props => {
   // Create Agency Administrator if not yet established, otherwise, render Edit Agency form.
 
   const setAgencyAdministratorForm = (
-    <form
-      method="POST"
-      action={`${BASE_URL}/employee/`}
-      onSubmit={handleSubmitNewAdministrator}
-    >
-      <div className="form-group">
-        <label htmlFor="name">Name: </label>
-        <input
-          type="text"
-          className="form-control"
-          id="name"
-          name="name"
-          value={newAgencyAdministrator.name}
-          onChange={handleSetAdministratorChange}
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="phoneNumber">Phone Number: </label>
-        <input
-          type="text"
-          className="form-control"
-          id="phoneNumber"
-          name="phoneNumber"
-          value={newAgencyAdministrator.phoneNumber}
-          onChange={handleSetAdministratorChange}
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="emailAddress">Email Address: </label>
-        <input
-          type="email"
-          className="form-control"
-          id="emailAddress"
-          name="emailAddress"
-          value={newAgencyAdministrator.emailAddress}
-          onChange={handleSetAdministratorChange}
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="password">Password: </label>
-        <input
-          type="password"
-          className="form-control"
-          id="password"
-          name="password"
-          value={newAgencyAdministrator.password}
-          onChange={handleSetAdministratorChange}
-        />
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="seniority">Seniority: </label>
-        <input
-          type="number"
-          className="form-control"
-          id="seniority"
-          name="seniority"
-          value={newAgencyAdministrator.seniority}
-          onChange={handleSetAdministratorChange}
-        />
-      </div>
-
-      <div className="form-group">
-        Make this employee an Agency Administrator?
-        <div className="form-check">
-          <label className="form-check-label" htmlFor="radio1">
-            <input
-              type="radio"
-              className="form-check-input"
-              id="radio1"
-              name="isAgencyAdministrator"
-              value="1"
-              checked
-            />
-            Yes
-          </label>
+    <div>
+      <p className="lead">
+        An Agency Administrator must be set before continuing.
+      </p>
+      <form
+        method="POST"
+        action={`${BASE_URL}/employee/`}
+        onSubmit={handleSubmitNewAdministrator}
+      >
+        <div className="form-group">
+          <label htmlFor="name">Name: </label>
+          <input
+            type="text"
+            className="form-control"
+            id="name"
+            name="name"
+            value={newAgencyAdministrator.name}
+            onChange={handleSetAdministratorChange}
+          />
         </div>
-        <div className="form-check">
-          <label className="form-check-label" htmlFor="radio2">
-            <input
-              type="radio"
-              className="form-check-input"
-              id="radio2"
-              name="isAgencyAdministrator"
-              value="0"
-            />
-            No
-          </label>
-        </div>
-      </div>
 
-      <div className="form-group">
-        Can this employee work details?
-        <div className="form-check">
-          <label className="form-check-label" htmlFor="radio1">
-            <input
-              type="radio"
-              className="form-check-input"
-              id="radio1"
-              name="canWorkDetails"
-              value="1"
-              checked
-            />
-            Yes
-          </label>
-        </div>
-        <div className="form-check">
-          <label className="form-check-label" htmlFor="radio2">
-            <input
-              type="radio"
-              className="form-check-input"
-              id="radio2"
-              name="canWorkDetails"
-              value="0"
-            />
-            No
-          </label>
-        </div>
-      </div>
+        <Form.Group>
+          <Form.Label>Select an Agency Administrator</Form.Label>
+          <Form.Control as="select"></Form.Control>
+        </Form.Group>
 
-      <div className="form-group">
-        <input
-          type="hidden"
-          className="form-control"
-          id="agencyAffiliation"
-          name="agencyAffiliation"
-          value={newAgencyAdministrator.agencyAffiliation}
-          onChange={handleSetAdministratorChange}
-        />
-      </div>
+        <div className="form-group">
+          Make this employee an Agency Administrator?
+          <div className="form-check">
+            <label className="form-check-label" htmlFor="radio1">
+              <input
+                type="radio"
+                className="form-check-input"
+                id="radio1"
+                name="isAgencyAdministrator"
+                value="1"
+                checked
+              />
+              Yes
+            </label>
+          </div>
+          <div className="form-check">
+            <label className="form-check-label" htmlFor="radio2">
+              <input
+                type="radio"
+                className="form-check-input"
+                id="radio2"
+                name="isAgencyAdministrator"
+                value="0"
+              />
+              No
+            </label>
+          </div>
+        </div>
 
-      <button type="submit" className="btn btn-warning">
-        Set Agency Administrator
-      </button>
-    </form>
+        <div className="form-group">
+          Can this employee work details?
+          <div className="form-check">
+            <label className="form-check-label" htmlFor="radio1">
+              <input
+                type="radio"
+                className="form-check-input"
+                id="radio1"
+                name="canWorkDetails"
+                value="1"
+                checked
+              />
+              Yes
+            </label>
+          </div>
+          <div className="form-check">
+            <label className="form-check-label" htmlFor="radio2">
+              <input
+                type="radio"
+                className="form-check-input"
+                id="radio2"
+                name="canWorkDetails"
+                value="0"
+              />
+              No
+            </label>
+          </div>
+        </div>
+
+        <div className="form-group">
+          <input
+            type="hidden"
+            className="form-control"
+            id="agencyAffiliation"
+            name="agencyAffiliation"
+            value={newAgencyAdministrator.agencyAffiliation}
+            onChange={handleSetAdministratorChange}
+          />
+        </div>
+
+        <button type="submit" className="btn btn-warning">
+          Set Agency Administrator
+        </button>
+      </form>
+    </div>
   );
-
-  //   passwordHash,
-
-  //   agencyAffiliation;
 
   const editAgencyForm = (
     <form

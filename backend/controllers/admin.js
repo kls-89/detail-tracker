@@ -16,8 +16,14 @@ const getAgencies = async (req, res, next) => {
 
 const getAgency = async (req, res, next) => {
   try {
-    const agency = await Agency.findById({ _id: req.params.id });
-    res.status(200).json(agency);
+    const agency = await Agency.findById({ _id: req.params.id })
+      .populate('employees', 'name ')
+      .exec()
+      .then(agency => {
+        console.log(agency);
+        res.status(200).json(agency);
+      })
+      .catch(err => console.log('error looking up agency', err));
   } catch (error) {
     res.status(404).json(error);
   }
@@ -28,7 +34,7 @@ const postAgency = async (req, res, next) => {
   const newAgency = new Agency({ name, address, phoneNumber, detailRate });
   try {
     await newAgency.save();
-    res.status(200).json(newAgency);
+    res.status(201).json(newAgency);
   } catch (error) {
     res.status(400).json({ error });
   }
@@ -36,7 +42,7 @@ const postAgency = async (req, res, next) => {
 
 const putAgency = (req, res, next) => {
   console.log(req);
-  res.send('put agency');
+  res.send('TODO: put agency');
 };
 
 const deleteAgency = async (req, res, next) => {
