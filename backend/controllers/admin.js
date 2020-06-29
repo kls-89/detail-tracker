@@ -1,168 +1,127 @@
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
-
 const Agency = require('../models/agency');
-const Employee = require('../models/employee');
+const baseURL = 'http://localhost:3001/admin';
 
-// AGENCY
-const getAgencies = async (req, res, next) => {
-  try {
-    const agencies = await Agency.find({});
-    res.status(200).json(agencies);
-  } catch (error) {
-    res.status(400).json(error);
-  }
+const getAgencies = (req, res, next) => {
+  Agency.find({})
+    .exec()
+    .then(docs => {
+      res.status(200).json({
+        agencyCount: docs.length,
+        agencies: docs.map(doc => {
+          return {
+            doc,
+            request: {
+              type: 'GET',
+              description: 'View individual agency specifics',
+              url: `${baseURL}/agency/${doc._id}`
+            }
+          };
+        })
+      });
+    })
+    .catch(err => res.status(500).json({ error: err }));
 };
 
-const getAgency = async (req, res, next) => {
-  try {
-    const agency = await Agency.findById({ _id: req.params.id })
-      .populate('employees', 'name ')
-      .exec()
-      .then(agency => {
-        console.log(agency);
-        res.status(200).json(agency);
-      })
-      .catch(err => console.log('error looking up agency', err));
-  } catch (error) {
-    res.status(404).json(error);
-  }
+const getAgency = (req, res, next) => {
+  Agency.findById({ _id: req.params.agencyId })
+    .populate('employees', 'name seniority emailAddress isAgencyAdmin')
+    .exec()
+    .then(doc => {
+      res.status(200).json({
+        doc,
+        request: {
+          type: 'GET',
+          description: 'View all agencies',
+          url: `${baseURL}/agency`
+        }
+      });
+    })
+    .catch(err => res.status(500).json({ error: err }));
 };
 
-const postAgency = async (req, res, next) => {
-  const { name, address, phoneNumber, detailRate } = req.body;
-  const newAgency = new Agency({ name, address, phoneNumber, detailRate });
-  try {
-    await newAgency.save();
-    res.status(201).json(newAgency);
-  } catch (error) {
-    res.status(400).json({ error });
-  }
-};
-
-const putAgency = (req, res, next) => {
-  console.log(req);
-  res.send('TODO: put agency');
-};
-
-const deleteAgency = async (req, res, next) => {
-  try {
-    const agencyId = req.params.id;
-    await Agency.findByIdAndRemove({ _id: agencyId });
-    res.status(204).json({ message: `Agency with ID ${agencyId} removed.` });
-  } catch (error) {
-    res.status(400).json({ error });
-  }
-};
-
-// EMPLOYEE
-
-const getEmployees = async (req, res, next) => {
-  try {
-    const employees = await Employee.find({});
-    res.status(200).json(employees);
-  } catch (error) {
-    res.status(400).json(error);
-  }
-};
-
-const getEmployee = async (req, res, next) => {
-  try {
-    const employee = await Employee.findById({ _id: req.params.id });
-    res.status(200).json(employee);
-  } catch (error) {
-    res.status(404).json(error);
-  }
-};
-
-const postEmployee = async (req, res, next) => {
+const postAgency = (req, res, next) => {
   const {
     name,
+    streetAddress,
+    city,
+    state,
+    zipCode,
     phoneNumber,
-    emailAddress,
-    password,
-    isAgencyAdmin,
-    canWorkDetails,
-    seniority,
-    agencyAffiliation
+    detailRate
   } = req.body;
 
-  try {
-    await bcrypt.hash(password, saltRounds, (err, passwordHash) => {
-      if (err) {
-        throw new Error('Error hashing password in postEmployee route', err);
-      }
+  const newAgency = new Agency({
+    name,
+    streetAddress,
+    city,
+    state,
+    zipCode,
+    phoneNumber,
+    detailRate
+  });
 
-      // TODO: Add validation to verify employee doesn't already exist.
-
-      // CREATE NEW EMPLOYEE
-      const newEmployee = new Employee({
-        name,
-        phoneNumber,
-        emailAddress,
-        passwordHash,
-        isAgencyAdmin,
-        canWorkDetails,
-        seniority,
-        agencyAffiliation
+  newAgency
+    .save()
+    .then(doc => {
+      res.status(201).json({
+        message: 'Agency created',
+        doc,
+        request: {
+          type: 'GET',
+          description: 'View all agencies',
+          url: `${baseURL}/agency`
+        }
       });
-
-      // SAVE NEW EMPLOYEE TO EMPLOYEE COLLECTION
-      newEmployee
-        .save()
-        .then(async () => {
-          try {
-            const foundAgency = await Agency.findById(agencyAffiliation);
-            // Save ref to employee in the Agency's document
-            foundAgency.employees.push(newEmployee._id);
-            // update Agency Admin list if need be
-            if (isAgencyAdmin) {
-              foundAgency.agencyAdministrators.push(newEmployee._id);
-            }
-            await foundAgency.save();
-          } catch (error) {
-            if (error) throw new Error('Error Updating Agency', error);
-          }
-        })
-        .then(() => {
-          return res.status(200).json(newEmployee);
-        })
-        .catch(err =>
-          console.log(
-            'Error saving employee to db from postEmployee controller',
-            err
-          )
-        );
-    });
-  } catch (error) {
-    res.status(400).json({ error });
-  }
+    })
+    .catch(err => res.status(500).json({ error: err }));
 };
 
-const putEmployee = (req, res, next) => {
-  console.log(req);
-  res.send('put Employee');
+const patchAgency = (req, res, next) => {
+  const agencyId = req.params.agencyId;
+
+  const updateOps = {};
+  for (const ops of req.body) {
+    updateOps[ops.propName] = ops.value;
+  }
+
+  Agency.findByIdAndUpdate(agencyId, { $set: updateOps })
+    .exec()
+    .then(updatedAgency => {
+      res.status(200).json({
+        updatedAgency,
+        request: {
+          type: 'GET',
+          description: 'View individual agency specifics',
+          url: `${baseURL}/agency/${agencyId}`
+        }
+      });
+    })
+    .catch(err => res.status(500).json({ error: err }));
 };
 
-const deleteEmployee = async (req, res, next) => {
-  try {
-    const employeeId = req.params.id;
-    await Employee.findByIdAndRemove({ _id: employeeId });
-    res.status(204).json({ message: `Agency with ID ${employeeId} removed.` });
-  } catch (error) {
-    res.status(400).json({ error });
-  }
+const deleteAgency = (req, res, next) => {
+  const agencyId = req.params.agencyId;
+
+  Agency.findByIdAndDelete(agencyId)
+    .exec()
+    .then(agencyToDelete => {
+      res.status(204).json({
+        message: `Agency with ID ${agencyId} removed.`,
+        request: {
+          type: 'POST',
+          description: 'Create new agency',
+          url: `${baseURL}/agency`,
+          body: {}
+        }
+      });
+    })
+    .catch(err => res.status(500).json({ error: err }));
 };
 
 module.exports = {
   getAgencies,
   getAgency,
   postAgency,
-  putAgency,
-  deleteAgency,
-  getEmployees,
-  getEmployee,
-  postEmployee,
-  putEmployee,
-  deleteEmployee
+  patchAgency,
+  deleteAgency
 };

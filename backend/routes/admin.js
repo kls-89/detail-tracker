@@ -6,30 +6,15 @@ const adminController = require('../controllers/admin');
 router.get('/agency', adminController.getAgencies);
 
 // View individual agency
-router.get('/agency/:id', adminController.getAgency);
+router.get('/agency/:agencyId', adminController.getAgency);
 
 // Create new Agency
 router.post('/agency', adminController.postAgency);
 
 // Update Agency
-router.put('/agency/:id', adminController.putAgency);
+router.patch('/agency/:agencyId', adminController.patchAgency);
 
 // Delete Agency
-router.delete('/agency/:id', adminController.deleteAgency);
-
-// View all Employees
-router.get('/employee', adminController.getEmployees);
-
-// view individual employee
-router.get('/employee/:id', adminController.getEmployee);
-
-// Create new Employee
-router.post('/employee', adminController.postEmployee);
-
-// Update Employee
-router.put('/employee/:id', adminController.putEmployee);
-
-// Delete Employee
-router.delete('/employee/:id', adminController.deleteEmployee);
+router.delete('/agency/:agencyId', adminController.deleteAgency);
 
 module.exports = router;

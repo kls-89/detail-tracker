@@ -1,16 +1,23 @@
-const mongoose = require('mongoose');
 const Detail = require('../models/detail');
 
 const getDetails = (req, res, next) => {
-  Detail.find({})
+  Detail.find()
+    .select('location duration detailFilled dateOfDetail')
     .exec()
     .then(docs => {
-      res.status(200).json(docs);
-      // if (docs.length > 0) {
-      //   res.status(200).json(docs);
-      // } else {
-      //   res.status(404).json({ message: 'No details found.' });
-      // }
+      const responseObject = {
+        count: docs.length,
+        details: docs.map(doc => {
+          return {
+            doc,
+            request: {
+              type: 'GET',
+              url: `http://localhost:3001/api/details/${doc.id}`
+            }
+          };
+        })
+      };
+      res.status(200).json(responseObject);
     })
     .catch(err => {
       res.status(500).json({ error: err });
@@ -69,15 +76,23 @@ const postDetail = (req, res, next) => {
 
   detail
     .save()
+    .exec()
     .then(result => {
-      console.log(result);
-      res.status(201).json({ message: 'Detail created', detail });
+      res.status(201).json({
+        message: 'Detail created',
+        detail,
+        request: {
+          type: 'GET',
+          description: 'View all details',
+          url: 'http://localhost:3001/api/details'
+        }
+      });
     })
     .catch(err => res.status(500).json({ error: err }));
 };
 
 const patchDetail = (req, res, next) => {
-  const detailId = req.params.id;
+  const detailId = req.params.detailId;
 
   // Set up for only updating that which is forwarded from req.body:
   const updateOps = {};
@@ -88,7 +103,6 @@ const patchDetail = (req, res, next) => {
   Detail.update(detailId, { $set: updateOps })
     .exec()
     .then(result => {
-      console.log(result);
       res.status(200).json(result);
     })
     .catch(err => res.status(500).json({ error: err }));

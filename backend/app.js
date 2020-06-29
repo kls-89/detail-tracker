@@ -22,7 +22,9 @@ app.use((req, res, next) => {
 
 // Routes
 const adminRoutes = require('./routes/admin');
+const authRoutes = require('./routes/auth');
 const detailRoutes = require('./routes/details');
+const employeeRoutes = require('./routes/employee');
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -30,6 +32,8 @@ app.use(bodyParser.json());
 
 app.use('/admin', adminRoutes);
 app.use('/api/details', detailRoutes);
+app.use('/api/employees', employeeRoutes);
+app.use(authRoutes);
 
 app.get('/', (req, res) => {
   res.send('connected');
