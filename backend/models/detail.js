@@ -19,7 +19,6 @@ const detailSchema = new mongoose.Schema(
     },
     startTime: {
       type: Date,
-      required: true,
       default: Date.now
     },
     endTime: {
@@ -27,7 +26,6 @@ const detailSchema = new mongoose.Schema(
     },
     duration: {
       type: Number,
-      required: true,
       default: 8
     },
     location: {
@@ -36,12 +34,10 @@ const detailSchema = new mongoose.Schema(
     },
     numberOfOfficers: {
       type: Number,
-      required: true,
       default: 1
     },
     cruiserNeeded: {
       type: Boolean,
-      required: true,
       default: false
     },
     vendorContactName: {
@@ -60,6 +56,19 @@ const detailSchema = new mongoose.Schema(
     agencyId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Agency'
+    },
+
+    officersAcceptingDetail: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Employee'
+    },
+    callTakerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Employee'
+    },
+    detailFilledBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Employee'
     }
   },
   schemaOptions

@@ -7,7 +7,19 @@ const agencySchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  address: {
+  streetAddress: {
+    type: String,
+    required: true
+  },
+  city: {
+    type: String,
+    required: true
+  },
+  state: {
+    type: String,
+    required: true
+  },
+  zipCode: {
     type: String,
     required: true
   },
@@ -21,7 +33,6 @@ const agencySchema = new mongoose.Schema({
   },
   outOfTownAvailable: {
     type: Boolean,
-    required: true,
     default: true
   },
   employees: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Employee' }],

@@ -9,6 +9,9 @@ const employeeSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  title: {
+    type: String
+  },
   phoneNumber: {
     type: String,
     required: true
@@ -20,9 +23,6 @@ const employeeSchema = new mongoose.Schema({
   passwordHash: {
     type: String,
     required: true
-  },
-  passwordResetToken: {
-    type: String
   },
   isAgencyAdmin: {
     type: Boolean,
