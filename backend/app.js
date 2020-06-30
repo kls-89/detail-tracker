@@ -30,6 +30,10 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+// MIDDLEWARE
+const { isLoggedIn } = require('./middleware/checkPermissons');
+
+// app.use(isLoggedIn);
 app.use('/admin', adminRoutes);
 app.use('/api/details', detailRoutes);
 app.use('/api/employees', employeeRoutes);

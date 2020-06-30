@@ -76,7 +76,6 @@ const postDetail = (req, res, next) => {
 
   detail
     .save()
-    .exec()
     .then(result => {
       res.status(201).json({
         message: 'Detail created',

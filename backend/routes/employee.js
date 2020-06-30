@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const employeeController = require('../controllers/employee');
+// const {  } = require('../middleware/checkPermissons');
 
 // View all Employees
 router.get('/', employeeController.getEmployees);

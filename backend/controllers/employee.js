@@ -164,8 +164,7 @@ const deleteEmployee = (req, res, next) => {
         request: {
           type: 'POST',
           description: 'Create new employee',
-          url: `${baseURL}`,
-          body: {}
+          url: `${baseURL}`
         }
       });
     })

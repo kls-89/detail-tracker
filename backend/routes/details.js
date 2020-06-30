@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const detailController = require('../controllers/detail');
 
+// middleware
+// const {  } = require('../middleware/checkPermissons');
+
 // View all Details
 router.get('/', detailController.getDetails);
 

@@ -1,4 +1,17 @@
+const jwt = require('jsonwebtoken');
+
 // Middleware function to check user permissions.
+
+const isLoggedIn = (req, res, next) => {
+  try {
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.JWT_KEY);
+    req.employeeData = decoded;
+    next();
+  } catch (error) {
+    return res.status(401).json({ message: 'Auth failed' });
+  }
+};
 
 // TODO:
 const belongsToAgency = (req, res, next) => {
@@ -25,6 +38,7 @@ const checkTownAuthorization = (req, res, next) => {
 };
 
 module.exports = {
+  isLoggedIn,
   belongsToAgency,
   isAgencyAdmin,
   canWorkDetails,
