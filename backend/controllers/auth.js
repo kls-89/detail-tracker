@@ -21,7 +21,8 @@ const postLogin = (req, res, next) => {
             {
               emailAddress: employee[0].emailAddress,
               employeeId: employee[0]._id,
-              agencyAffiliation: employee[0].agencyAffiliation
+              agencyAffiliation: employee[0].agencyAffiliation,
+              canWorkDetails: employee[0].canWorkDetails
             },
             process.env.JWT_KEY,
             {

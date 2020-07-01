@@ -3,10 +3,13 @@ const router = express.Router();
 const detailController = require('../controllers/detail');
 
 // middleware
-// const {  } = require('../middleware/checkPermissons');
+const {
+  belongsToAgency,
+  canWorkDetails
+} = require('../middleware/checkPermissons');
 
 // View all Details
-router.get('/', detailController.getDetails);
+router.get('/', canWorkDetails, detailController.getDetails);
 
 // View single Detail
 router.get('/:detailId', detailController.getDetail);

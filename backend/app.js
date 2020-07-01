@@ -33,10 +33,9 @@ app.use(bodyParser.json());
 // MIDDLEWARE
 const { isLoggedIn } = require('./middleware/checkPermissons');
 
-// app.use(isLoggedIn);
-app.use('/admin', adminRoutes);
-app.use('/api/details', detailRoutes);
-app.use('/api/employees', employeeRoutes);
+app.use('/admin', isLoggedIn, adminRoutes);
+app.use('/api/details', isLoggedIn, detailRoutes);
+app.use('/api/employees', isLoggedIn, employeeRoutes);
 app.use(authRoutes);
 
 app.get('/', (req, res) => {
