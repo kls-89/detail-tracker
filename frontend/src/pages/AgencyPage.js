@@ -4,6 +4,7 @@ import axios from 'axios';
 const AgencyPage = props => {
   const agencyId = props.match.params.id;
   const [agency, setAgency] = useState([]);
+  // const token = localStorage.getItem('token');
   useEffect(() => {
     document.title = agency.name;
     axios

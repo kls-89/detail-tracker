@@ -1,33 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Container from "react-bootstrap/Container";
+import Container from 'react-bootstrap/Container';
 import AppCard from '../components/AppCard';
 
 const BASE_URL = 'http://localhost:3001/admin';
 
 const AdminDashboard = props => {
   const [agencies, setAgencies] = useState([]);
+  const token = localStorage.getItem("token")
 
   useEffect(() => {
     axios
-      .get(`${BASE_URL}/agency`)
+      .get(`${BASE_URL}/agency`, {
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      })
       .then(result => {
-        setAgencies(result.data);
+        console.log(result.data);
+        setAgencies(result.data.agencies);
       })
       .catch(error =>
         console.log('error fetching agencies in admin dashboard', error)
       );
-  }, [agencies]);
+  }, []);
 
   const renderAgencies = agencies.map(agency => {
+    console.log(agency);
     return (
       <AppCard
         {...props}
-        key={agency.id}
-        id={agency.id}
-        name={agency.name}
-        address={agency.address}
-        phoneNumber={agency.phoneNumber}
+        key={agency.doc.id}
+        id={agency.doc.id}
+        name={agency.doc.name}
+        address={agency.doc.streetAddress || agency.doc.address}
+        phoneNumber={agency.doc.phoneNumber}
         detailRate={agency.detailRate}
       />
     );

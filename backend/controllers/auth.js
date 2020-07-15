@@ -29,6 +29,7 @@ const postLogin = (req, res, next) => {
               expiresIn: '1h'
             }
           );
+          res.cookie('token', token);
           return res.status(200).json({ message: 'Auth successful', token });
         }
         // incorrect pw
